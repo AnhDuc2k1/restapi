@@ -1,11 +1,14 @@
 package org.aibles.userservice.service.iml;
 
+import javassist.NotFoundException;
+import org.aibles.userservice.exception.UserAlreadyExistsException;
+import org.aibles.userservice.exception.UserNotFoundException;
 import org.aibles.userservice.model.User;
 import org.aibles.userservice.repository.UserRepository;
 import org.aibles.userservice.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+//import org.springframework.*;
 import java.util.List;
 import java.util.Scanner;
 @Service
@@ -13,6 +16,7 @@ public class UserServiceIml implements UserService {
 
     private final UserRepository userRepository;
     private Scanner sc = new Scanner(System.in);
+
     @Autowired
     public UserServiceIml(UserRepository userRepository) {
         this.userRepository = userRepository;
@@ -21,26 +25,48 @@ public class UserServiceIml implements UserService {
     @Override
     public User createUser(User user) {
         // save user to database
+        User existingUser = userRepository.findById(user.getId()).get();
+        if (existingUser !=null ) {
+            throw new UserAlreadyExistsException();
+        }
         User userCreated = userRepository.save(user);
         return userCreated;
     }
 
     @Override
     public User getUser(int id) {
-        return userRepository.findById(id).orElse(null);
+        User existingUser  = userRepository.findById(id).orElse(null);
+        if (existingUser == null ) {
+                throw new UserNotFoundException();
+        }
+        else {
+            return existingUser;
+        }
     }
-
     @Override
-    public List<User> getListOfUser() {
+    public List<User> getUsers() {
         return (userRepository.findAll());
     }
 
     @Override
-    public void deleteUser(User user) {
-        userRepository.delete(user);
+    public void deleteUser(int id) {
+        User existingUser = userRepository.findById(id).get();
+        if (existingUser == null) {
+            throw new UserNotFoundException();
+        } else {
+            userRepository.delete(existingUser);
+        }
     }
     @Override
-    public User updateUser(User user) {
-        return userRepository.save(user);
+    public User updateUser(int id, User newUserDetails) {
+        User existingUser = userRepository.findById(id).get();
+        if (existingUser == null) {
+            throw new UserNotFoundException();
+        } else {
+            existingUser.setName(newUserDetails.getName());
+            existingUser.setAge(newUserDetails.getAge());
+            User updatedUser = userRepository.save(existingUser);
+            return updatedUser;
+        }
     }
 }

@@ -1,21 +1,17 @@
 package org.aibles.userservice.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Objects;
 
 @Entity
-@JsonIgnoreProperties
 @Table(name = "users")
 public class User implements Serializable {
 
     @Id
     @Column(name = "id")
+    @GeneratedValue (strategy = GenerationType.IDENTITY)
+    // nếu không có dòng này, id sẽ chỉ tự động tăng trong database mà không hiển thị id cho người dùng ??
     private int id;
 
     @Column(name = "name")

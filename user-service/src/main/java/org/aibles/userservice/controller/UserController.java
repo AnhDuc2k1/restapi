@@ -20,38 +20,25 @@ public class UserController {
     @GetMapping("/{id}")
     public ResponseEntity<User> getUser(@PathVariable("id") int id){
         User user = userService.getUser(id);
-        if (user !=null) {
-            return ResponseEntity.status(HttpStatus.OK).body(user);
-        }
-        else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+//        return ResponseEntity.status(HttpStatus.OK).body(user);
+        return new ResponseEntity<User>(user, HttpStatus.OK);
     }
     @PostMapping
-    public User createUser(@RequestBody User user){
-        return userService.createUser(user);
+    public ResponseEntity<User> createUser(@RequestBody User user){
+//        return userService.createUser(user);
+        User createdUser = userService.createUser(user);
+        return new ResponseEntity<User>(createdUser,HttpStatus.OK);
     }
-//    @GetMapping
-//    public List <User> getListOfUser(){
-//        return  userService.getListOfUser();
-//    }
+
     @GetMapping
     public ResponseEntity<List<User>> listAllContact(){
-        List<User> listOfUser= userService.getListOfUser();
-        if(listOfUser.isEmpty()) {
-            return new ResponseEntity(HttpStatus.NO_CONTENT);
-        }
-        return new ResponseEntity<List<User>>(listOfUser, HttpStatus.OK);
+        List<User> listUsers= userService.getUsers();
+        return new ResponseEntity<List<User>>(listUsers, HttpStatus.OK);
     }
     @DeleteMapping("/{id}")
-    public ResponseEntity<User> deleteUser(@PathVariable("id") int id) {
-        User user = userService.getUser(id);
-        if(user == null) {
-//            return ResponseEntity.notFound().build();
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        userService.deleteUser(user);
-            return ResponseEntity.status(HttpStatus.OK).build();
-//        return ResponseEntity.ok().build();
+    public ResponseEntity<String> deleteUser(@PathVariable("id") int id) {
+        userService.deleteUser(id);
+        return new ResponseEntity<String>("Delete Successfully",HttpStatus.OK);
     }
+
 }
