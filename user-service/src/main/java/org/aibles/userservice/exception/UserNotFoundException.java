@@ -1,10 +1,9 @@
 package org.aibles.userservice.exception;
 
-public class UserNotFoundException extends RuntimeException{
-    public UserNotFoundException() {
-    }
+import org.springframework.http.HttpStatus;
 
-    public UserNotFoundException(String message) {
-        super(message);
+public class UserNotFoundException extends AbstractException{
+    public UserNotFoundException() {
+        super("User Not Found", HttpStatus.NOT_FOUND);
     }
 }

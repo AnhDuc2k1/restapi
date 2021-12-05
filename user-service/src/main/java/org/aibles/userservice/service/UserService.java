@@ -8,9 +8,9 @@ import java.util.List;
 
 public interface UserService {
 
-    User createUser(User user) throws UserAlreadyExistsException;
-    User getUser(int id) throws UserNotFoundException;
+    User createUser(User user);
+    User getUser(int id) ;
     List<User> getUsers();
-    void deleteUser(int id) throws UserNotFoundException;
-    User updateUser(int id, User user) throws UserNotFoundException;
+    void deleteUser(int id);
+    User updateUser(int id, User user);
 }

@@ -1,10 +1,9 @@
 package org.aibles.userservice.exception;
 
-public class UserAlreadyExistsException extends RuntimeException{
-    public UserAlreadyExistsException() {
-    }
+import org.springframework.http.HttpStatus;
 
-    public UserAlreadyExistsException(String message) {
-        super(message);
+public class UserAlreadyExistsException extends AbstractException{
+    public UserAlreadyExistsException() {
+        super("User Already Exists", HttpStatus.CONFLICT);
     }
 }

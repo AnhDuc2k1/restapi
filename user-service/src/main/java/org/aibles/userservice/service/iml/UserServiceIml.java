@@ -23,9 +23,8 @@ public class UserServiceIml implements UserService {
     }
 
     @Override
-    public User createUser(User user) {
-        // save user to database
-        User existingUser = userRepository.findById(user.getId()).get();
+    public User createUser(User user) throws UserAlreadyExistsException{
+        User existingUser = userRepository.findById(user.getId()).orElse(null);
         if (existingUser !=null ) {
             throw new UserAlreadyExistsException();
         }
@@ -34,7 +33,7 @@ public class UserServiceIml implements UserService {
     }
 
     @Override
-    public User getUser(int id) {
+    public User getUser(int id) throws UserNotFoundException{
         User existingUser  = userRepository.findById(id).orElse(null);
         if (existingUser == null ) {
                 throw new UserNotFoundException();
@@ -43,23 +42,25 @@ public class UserServiceIml implements UserService {
             return existingUser;
         }
     }
+
     @Override
     public List<User> getUsers() {
         return (userRepository.findAll());
     }
 
     @Override
-    public void deleteUser(int id) {
-        User existingUser = userRepository.findById(id).get();
+    public void deleteUser(int id)  throws UserNotFoundException{
+        User existingUser = userRepository.findById(id).orElse(null);
         if (existingUser == null) {
             throw new UserNotFoundException();
         } else {
             userRepository.delete(existingUser);
         }
     }
+
     @Override
-    public User updateUser(int id, User newUserDetails) {
-        User existingUser = userRepository.findById(id).get();
+    public User updateUser(int id, User newUserDetails)  throws UserNotFoundException{
+        User existingUser = userRepository.findById(id).orElse(null);
         if (existingUser == null) {
             throw new UserNotFoundException();
         } else {

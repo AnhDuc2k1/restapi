@@ -1,6 +1,7 @@
 package org.aibles.userservice.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -10,13 +11,16 @@ public class User implements Serializable {
 
     @Id
     @Column(name = "id")
-    @GeneratedValue (strategy = GenerationType.IDENTITY)
-    // nếu không có dòng này, id sẽ chỉ tự động tăng trong database mà không hiển thị id cho người dùng ??
+    @GeneratedValue (strategy = GenerationType.IDENTITY)   // nếu không có dòng này, id sẽ chỉ tự động tăng trong database mà không hiển thị id cho người dùng ??
     private int id;
 
+    @NotBlank(message = "Name must not be blank")
+    @Pattern(regexp = "[^0-9]+", message = "Name cannot contain numbers")
+    @Size(min = 1, max =30, message = "Name must have atleast 1 characters")
     @Column(name = "name")
     private String name;
 
+    @Min (value = 18, message = "Age must be more than 18")
     @Column(name = "age")
     private int age;
 
@@ -74,6 +78,4 @@ public class User implements Serializable {
                 ", age=" + age +
                 '}';
     }
-
-
 }
