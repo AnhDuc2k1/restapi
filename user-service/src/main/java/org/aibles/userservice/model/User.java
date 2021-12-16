@@ -1,61 +1,37 @@
 package org.aibles.userservice.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
-import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.util.Objects;
 
+@Data
 @Entity
 @Table(name = "users")
 public class User implements Serializable {
 
     @Id
+    @GeneratedValue (strategy = GenerationType.IDENTITY)// nếu không có dòng này, id sẽ chỉ tự động tăng trong database mà không hiển thị id cho người dùng ??
     @Column(name = "id")
-    @GeneratedValue (strategy = GenerationType.IDENTITY)   // nếu không có dòng này, id sẽ chỉ tự động tăng trong database mà không hiển thị id cho người dùng ??
     private int id;
 
-    @NotBlank(message = "Name must not be blank")
-    @Pattern(regexp = "[^0-9]+", message = "Name cannot contain numbers")
-    @Size(min = 1, max =30, message = "Name must have atleast 1 characters")
     @Column(name = "name")
     private String name;
 
-    @Min (value = 18, message = "Age must be more than 18")
     @Column(name = "age")
     private int age;
 
-    public User() {
-    }
+    @Column(name = "email")
+    private String email;
 
-    public User(int id, String name, int age) {
-        this.id = id;
-        this.name = name;
-        this.age = age;
-    }
+    @Column(name = "account")
+    private String account;
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public int getAge() {
-        return age;
-    }
-
-    public void setAge(int age) {
-        this.age = age;
-    }
+    @Column(name = "password")
+    private String password;
 
     @Override
     public boolean equals(Object o) {

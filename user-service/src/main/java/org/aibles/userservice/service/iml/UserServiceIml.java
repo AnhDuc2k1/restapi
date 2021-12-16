@@ -1,16 +1,20 @@
 package org.aibles.userservice.service.iml;
 
-import javassist.NotFoundException;
 import org.aibles.userservice.exception.UserAlreadyExistsException;
 import org.aibles.userservice.exception.UserNotFoundException;
 import org.aibles.userservice.model.User;
 import org.aibles.userservice.repository.UserRepository;
 import org.aibles.userservice.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-//import org.springframework.*;
+
 import java.util.List;
 import java.util.Scanner;
+
 @Service
 public class UserServiceIml implements UserService {
 
@@ -44,8 +48,9 @@ public class UserServiceIml implements UserService {
     }
 
     @Override
-    public List<User> getUsers() {
-        return (userRepository.findAll());
+    public List<User> getUsersWithPagination(int pageNumber, int pageSize) {
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        return  userRepository.findAll(pageable).getContent();
     }
 
     @Override
@@ -66,6 +71,9 @@ public class UserServiceIml implements UserService {
         } else {
             existingUser.setName(newUserDetails.getName());
             existingUser.setAge(newUserDetails.getAge());
+            existingUser.setPassword(newUserDetails.getPassword());
+            existingUser.setAccount(newUserDetails.getAccount());
+            existingUser.setEmail(newUserDetails.getEmail());
             User updatedUser = userRepository.save(existingUser);
             return updatedUser;
         }
